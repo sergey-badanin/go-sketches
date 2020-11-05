@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<p>
+    <button id='sendButton'>Send</button>
+</p>
+  
+<div><textarea name="messages" id="textMessages" rows="5" cols="30"></textarea></div>
+
+<div id="subscribe"></div>
+
+<script>
+    const sendButton = document.getElementById('sendButton')
+    sendButton.addEventListener('click', poll)
+
+    const textMessages = document.getElementById('textMessages')
+    textMessages.innerHTML = 'Text for message <br> New Line'
+
+    function poll() {
+        var req = new XMLHttpRequest(); 
+        req.open('GET', 'http://localhost:8082/poll', true);
+        req.onreadystatechange = function (e) {
+            if (req.readyState == 4) { 
+                if (req.status == 200) {
+                    textMessages.innerHTML += '&#013;&#010;' + req.responseText;
+                    poll();
+                } 
+            }
+        }
+        req.send(null)
+    }
+</script>
